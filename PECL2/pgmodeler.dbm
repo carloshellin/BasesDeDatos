@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.1-beta" last-position="0,0" last-zoom="1"
+	 default-owner="postgres">
+<database name="supermercado">
+</database>
+
+<schema name="public" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="tienda">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="200" y="260"/>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="ciudad" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<constraint name="Tienda_pk" type="pk-constr" table="public.tienda">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="opinion">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="400" y="20"/>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="texto">
+		<type name="varchar" length="500"/>
+	</column>
+	<column name="fechahora">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="puntuacion">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="Opinion_pk" type="pk-constr" table="public.opinion">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="puntuacion_chk" type="ck-constr" table="public.opinion">
+			<expression><![CDATA[puntuacion > 0 and puntuacion <= 10]]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigo_tienda" index="4"/>
+		<object name="numero_socio" index="5"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="socio_fk" index="2"/>
+		<object name="tienda_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="socio">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="60"/>
+	<column name="numero" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="email">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="nombre">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="direccion">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="telefono">
+		<type name="varchar" length="20"/>
+	</column>
+	<constraint name="Socio_pk" type="pk-constr" table="public.socio">
+		<columns names="numero" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="trabajador">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="560" y="400"/>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="nombre">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="telefonofijo">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="telefonomovil">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="turno">
+		<type name="char" length="1"/>
+	</column>
+	<column name="tipo">
+		<type name="char" length="1"/>
+	</column>
+	<column name="horas">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="Trabajador_pk" type="pk-constr" table="public.trabajador">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="turno_chk" type="ck-constr" table="public.trabajador">
+			<expression><![CDATA[turno = 'M' or turno = 'T']]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigo_tienda" index="7"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="tienda_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="oferta">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="960" y="820"/>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="fechainicio">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="fechafin">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="descuento">
+		<type name="float" length="0"/>
+	</column>
+	<constraint name="Oferta_pk" type="pk-constr" table="public.oferta">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="descuento_chk" type="ck-constr" table="public.oferta">
+			<expression><![CDATA[descuento > 0.0 and descuento <= 1.0]]></expression>
+	</constraint>
+	<constraint name="fecha_chk" type="ck-constr" table="public.oferta">
+			<expression><![CDATA[fechainicio < fechafin]]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigobarras_producto" index="4"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="producto_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="iva">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1460" y="760"/>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="tipo">
+		<type name="char" length="1"/>
+	</column>
+	<column name="porcentaje">
+		<type name="float" length="0"/>
+	</column>
+	<constraint name="IVA_pk" type="pk-constr" table="public.iva">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="tipo_chk" type="ck-constr" table="public.iva">
+			<expression><![CDATA[tipo = 'G' or tipo = 'R' or tipo = 'S']]></expression>
+	</constraint>
+	<constraint name="porcentaje_chk" type="ck-constr" table="public.iva">
+			<expression><![CDATA[porcentaje > 0.0 and porcentaje <= 1.0]]></expression>
+	</constraint>
+</table>
+
+<table name="producto">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1080" y="580"/>
+	<column name="codigobarras" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="nombre">
+		<type name="varchar" length="150"/>
+	</column>
+	<column name="preciosiniva">
+		<type name="money" length="0"/>
+	</column>
+	<column name="stock">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="Producto_pk" type="pk-constr" table="public.producto">
+		<columns names="codigobarras" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigo_iva" index="4"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="iva_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="cupon">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1160" y="200"/>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="Cupon_pk" type="pk-constr" table="public.cupon">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="descuento">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1060" y="360"/>
+	<column name="cantidad">
+		<type name="float" length="0"/>
+	</column>
+	<column name="codigo" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="descuento_pk" type="pk-constr" table="public.descuento">
+		<columns names="codigo" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="cantidad_chk" type="ck-constr" table="public.descuento">
+			<expression><![CDATA[cantidad > 0.0 and cantidad <= 1.0]]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigo_cupon" index="2"/>
+		<object name="codigobarras_producto" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="cupon_fk" index="1"/>
+		<object name="producto_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="aparece" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.tienda"
+	 dst-table="public.opinion"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="escribe" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.socio"
+	 dst-table="public.opinion"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="ticket">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="560" y="700"/>
+	<column name="identificador" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="fechahoraemision">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="total">
+		<type name="money" length="0"/>
+	</column>
+	<constraint name="Ticket_pk" type="pk-constr" table="public.ticket">
+		<columns names="identificador" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigo_trabajador" index="3"/>
+		<object name="numero_socio" index="4"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="socio_fk" index="2"/>
+		<object name="trabajador_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="emite" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.trabajador"
+	 dst-table="public.ticket"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="articulo" type="relnn"
+	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
+	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
+	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
+	 pk-col-pattern="id"
+	 custom-color="#83af1f"
+	 src-table="public.producto"
+	 dst-table="public.ticket"
+	 src-required="false" dst-required="false"
+	 table-name="articulo">
+	<label ref-type="name-label">
+		<position x="5.3928" y="9.56434"/>
+	</label>
+	<column name="cantidad">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="cantidad_chk" type="ck-constr" table="public.articulo">
+			<expression><![CDATA[cantidad  > 0]]></expression>
+	</constraint>
+</relationship>
+
+<table name="clasificacion">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="500"/>
+	<column name="nota">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="fecha">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="chk_nota" type="ck-constr" table="public.clasificacion">
+			<expression><![CDATA[nota >= 0 and nota <= 10]]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="codigo_evaluado" index="3"/>
+		<object name="codigo_evaluador" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="trabajador_fk" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="tiene" type="rel1n"
+	 src-col-pattern="{sc}_evaluador"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.trabajador"
+	 dst-table="public.clasificacion"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+	<column name="codigo_evaluado">
+		<type name="serial" length="0"/>
+	</column>
+</relationship>
+
+<relationship name="saldo" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.socio"
+	 dst-table="public.cupon"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="incluye" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.cupon"
+	 dst-table="public.descuento"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="pertenece" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.producto"
+	 dst-table="public.descuento"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="IVA_tiene_muchos_producto" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.iva"
+	 dst-table="public.producto"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="socio_tiene_muchos_ticket" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.socio"
+	 dst-table="public.ticket"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="3.64592" y="5.73934"/>
+	</label>
+</relationship>
+
+<relationship name="contrata" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.tienda"
+	 dst-table="public.trabajador"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="producto_tiene_muchos_oferta" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.producto"
+	 dst-table="public.oferta"
+	 src-required="true" dst-required="false">
+	<label ref-type="dst-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+</dbmodel>
